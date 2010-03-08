@@ -50,6 +50,7 @@ this.MooEditable = new Class({
 	Implements: [Events, Options],
 
 	options: {
+		bbcode: true,
 		toolbar: true,
 		cleanup: true,
 		paragraphise: true,
@@ -692,6 +693,13 @@ this.MooEditable = new Class({
 		do {
 			var oSource = source;
 
+			if ( this.options.bbcode ) {
+				source = source.replace( /\[u\](.*?)\[\/u\]/gi, '<u>$1</u>' );
+				source = source.replace( /\[b\](.*?)\[\/b\]/gi, '<b>$1</b>' );
+				source = source.replace( /\[i\](.*?)\[\/i\]/gi, '<i>$1</i>' );
+				source = source.replace( /\[url=(.*?)\](.*?)\[\/url\]/gi, '<a href="$1">$2</a>' );
+			}
+
 			// Webkit cleanup
 			source = source.replace(/<br class\="webkit-block-placeholder">/gi, "<br />");
 			source = source.replace(/<span class="Apple-style-span">(.*)<\/span>/gi, '$1');
@@ -739,6 +747,7 @@ this.MooEditable = new Class({
 				source = source.replace(/([^\n])<img/ig, '$1\n<img'); // move images to their own line
 				source = source.replace(/^\s*$/g, ''); // delete empty lines in the source code (not working in opera)
 			}
+
 
 			// Remove leading and trailing BRs
 			source = source.replace(/<br ?\/?>$/gi, '');
